@@ -141,6 +141,7 @@ report-workspace/
 ### 6. 效果展示预览（仅在用户要求时）
 
 - 用户说“看看效果”“图片效果”“展示报告”或需要向他人快速预览版式时，从**已通过质检的最终 PDF**派生 `showcase/vN/`；不得为了展示而重排、截图替换或改写 `.docx` 正稿。
+- 使用 `scripts/render_report_showcase.py --input <final.pdf> --output report-workspace/showcase/vN` 生成预览；脚本拒绝非 PDF 输入和非空输出目录，默认 144 DPI。
 - 预览至少生成逐页 PNG 和一张联系表；若只需要展示重点，可额外导出封面/基础信息页、系统方案页、关键证据页和结论页，并明确它们只是版式预览，不构成新的实验结论。
 - 展示预览与 `qa/` 相互独立：`qa/` 服务审稿，`showcase/` 服务浏览或演示；两者都不是报告正文，也不得覆盖 `output/` 的版本化 `.docx/.pdf`。
 - 如需把报告作为 PPT 的资料，只能将最终 PDF 或展示 PNG 作为 `technical-defense-ppt` 的只读 `input/fuel/`；不得由本技能创建或修改 PPT。
