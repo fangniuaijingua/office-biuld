@@ -1,0 +1,24 @@
+# Python and tool caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Private project inputs, generated Office outputs and render artifacts
+report-workspace/
+ppt-workspace/
+deliverables/
+*.doc
+*.docx
+*.pdf
+*.ppt
+*.pptx
+*.png
+*.jpg
+*.jpeg
+
+# Local secrets and editor state
+.env
+.env.*
+.vscode/
