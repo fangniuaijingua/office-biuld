@@ -18,6 +18,10 @@ deliverables/
 *.jpg
 *.jpeg
 
+# Explicitly approved visual samples for the public README only
+!assets/showcase/
+!assets/showcase/*.png
+
 # Local secrets and editor state
 .env
 .env.*
