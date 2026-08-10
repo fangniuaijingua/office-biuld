@@ -15,11 +15,11 @@
 
 ## 效果展示
 
-下列图片仅展示两条生产链的**版式、信息密度与视觉组织方式**：左图为模板优先报告的最终 PDF 联系表，右图为证据型技术答辩页面。它们不是可编辑交付物，也不作为性能或验收结论的证据。
+下列图片仅展示两条生产链的**版式、信息密度与视觉组织方式**：左图为模板优先报告的第一页封面预览，右图为证据型技术答辩页面。它们不是可编辑交付物，也不作为性能或验收结论的证据。
 
 <p align="center">
-  <img src="assets/showcase/report-v8-contact-sheet.png" alt="模板优先实验报告的六页联系表预览" width="48%" />
-  <img src="assets/showcase/ppt-evidence-editorial-v6.png" alt="证据型技术答辩页面预览" width="48%" />
+  <img src="assets/showcase/report-v8-cover.png" alt="模板优先实验报告的第一页封面预览" width="30%" />
+  <img src="assets/showcase/ppt-evidence-editorial-v6.png" alt="证据型技术答辩页面预览" width="64%" />
 </p>
 
 ## 标准工作流
