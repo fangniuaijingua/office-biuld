@@ -8,7 +8,7 @@
 
 | 技能 | 用途 | 交付边界 |
 | --- | --- | --- |
-| [`robot-report-suite`](skills/robot-report-suite/SKILL.md) | 基于指定 Word 模板创建、重构和修订 `.docx/.pdf` 实验报告、技术报告与竞赛报告 | 保留模板和基础信息页；不创建或修改 `.pptx`。 |
+| [`robot-report-suite`](skills/robot-report-suite/SKILL.md) | 基于指定 Word 模板创建、重构和修订 `.docx/.pdf` 实验报告、技术报告与竞赛报告；可按需生成同源 GitHub Markdown 伴随页 | 保留模板和基础信息页；Markdown 不替代正式报告；不创建或修改 `.pptx`。 |
 | [`technical-defense-ppt`](skills/technical-defense-ppt/SKILL.md) | 创建、改版、逐页审稿、渲染和交付答辩/项目汇报 `.pptx` | 不改写 Word 报告；报告仅作为可选只读输入。 |
 
 不要使用报告转 PPT 桥接技能。若项目同时需要报告和 PPT，分别创建独立工作区；只能将另一侧的定稿副本作为只读资料。
@@ -31,6 +31,7 @@
 3. 先形成章节卡片、图表清单和格式契约，再输出可审阅初版 `v0`。
 4. 渲染检查基础信息页、空白、表格、图题和证据关系；依反馈输出 `v1`、`v2`……，不覆盖输入。
 5. 用户需要图片效果展示时，仅从已通过质检的最终 PDF 派生 `showcase/vN/` 逐页 PNG 与联系表；不改写报告正文。默认不公开预览图；只有用户明确批准时，才可将脱敏/选定效果图放入 `assets/showcase/`。
+6. 用户需要 GitHub 呈现时，创建与正式报告同源的 Markdown 导读、证据索引和图源链接；允许为不同读者重复关键约束与结论限制，但参数、版本与证据状态必须一致。
 
 ### 技术答辩 PPT
 
