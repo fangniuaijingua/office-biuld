@@ -1,5 +1,7 @@
 # GitHub Markdown 伴随文档
 
+> 本页只约束“正式 Word/PDF + GitHub Markdown”的双载体交付。若任务只有 README、模块说明、协议、开发历史、证据索引或复盘，不要求 Word/PDF，请使用 [仓库 Markdown 独立工作流](repository-markdown.md)。
+
 ## 1. 目标与边界
 
 当正式 `.docx/.pdf` 报告还需要在 GitHub 供队友、评审或复现者阅读时，使用“双载体”：

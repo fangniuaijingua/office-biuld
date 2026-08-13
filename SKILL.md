@@ -1,13 +1,13 @@
 ---
 name: office-skills
-description: Office 文档技能目录。用户要按 Word 模板编写、重构或修订实验/技术报告，或要求实验报告与 GitHub Markdown/README 同源呈现时，路由到 robot-report-suite；用户要新建、修改、逐页审稿或渲染技术答辩/项目汇报 .pptx 时路由到 technical-defense-ppt。报告与 PPT 使用独立工作区，资料、数据、图片和文本先入燃料目录，再生成版本化初版并渲染微调。
+description: Office 文档技能目录。用户要按 Word 模板编写、重构或修订实验/技术报告，维护机器人与嵌入式项目的 GitHub README、协议、证据索引、开发历史或复盘文档，或要求报告与 GitHub Markdown 同源呈现时，路由到 robot-report-suite；用户要新建、修改、逐页审稿或渲染技术答辩/项目汇报 .pptx 时路由到 technical-defense-ppt。报告与 PPT 使用独立工作区，资料、数据、图片和文本先入燃料目录，再生成版本化初版并渲染微调。
 ---
 
 # Office Skills Catalog
 
 仅选择一个生产入口：
 
-- `.docx/.pdf` 报告，或报告与 GitHub Markdown 同源交付 → `skills/robot-report-suite/SKILL.md`。
+- `.docx/.pdf` 报告、报告与 GitHub Markdown 同源交付，或独立维护仓库 README、协议、证据索引、开发历史与复盘文档 → `skills/robot-report-suite/SKILL.md`。
 - `.pptx` 答辩或项目汇报 → `skills/technical-defense-ppt/SKILL.md`。
 
 不要创建或安装“报告转 PPT”桥接技能。若两种文档都需要，分别建立 `report-workspace/` 与 `ppt-workspace/`；报告和 PPT 只把对方的定稿副本视为只读资料。
@@ -19,4 +19,4 @@ description: Office 文档技能目录。用户要按 Word 模板编写、重构
 3. 报告先锁定模板保留范围与章节卡片；PPT 先锁定每页结论和版式卡。
 4. 输出版本化初版 `v0`，渲染检查后根据反馈输出 `v1`、`v2`……。
 5. 只交付通过格式/渲染/证据检查的版本化文件、源图和审计记录。
-6. 需要仓库呈现时，另建 Markdown 伴随页和证据索引；它与正式报告共用事实与图源，但不机械转换或替代 Word/PDF。
+6. 需要仓库呈现时，建立 Markdown 伴随页和证据索引；它与正式报告共用事实与图源，但不机械转换或替代 Word/PDF。仅维护仓库文档时，改用该技能的独立 Markdown 工作流，不虚构正式报告。
