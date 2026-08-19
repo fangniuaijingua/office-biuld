@@ -11,7 +11,6 @@
 | [`robot-report-suite`](skills/robot-report-suite/SKILL.md) | 基于指定 Word 模板创建、重构和修订 `.docx/.pdf` 实验报告、技术报告与竞赛报告；可按需生成同源 GitHub Markdown 伴随页，也可独立维护仓库 README、协议、证据索引、开发历史与复盘文档 | 有正式报告时保留模板和基础信息页；仅仓库文档时不虚构 Word 交付；不创建或修改 `.pptx`。 |
 | [`technical-defense-ppt`](skills/technical-defense-ppt/SKILL.md) | 创建、改版、逐页审稿、渲染和交付答辩/项目汇报 `.pptx` | 不改写 Word 报告；报告仅作为可选只读输入。 |
 
-不要使用报告转 PPT 桥接技能。若项目同时需要报告和 PPT，分别创建独立工作区；只能将另一侧的定稿副本作为只读资料。
 
 ## 效果展示
 
