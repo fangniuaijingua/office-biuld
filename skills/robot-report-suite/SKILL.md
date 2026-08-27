@@ -50,7 +50,7 @@ description: 用于机器人、嵌入式与自动化项目的模板优先 Word �
 
 “小步交付”不再阻止用户明确要求的完整报告；完整报告仍必须经过全稿渲染检查。
 
-仓库文档独立模式不创建 `report-workspace/`、不要求 Word 模板，也不补造 PDF。先完成 `references/repository-markdown.md` 中的仓库/分支/LFS 预检，再建立事实台账并按页面职责编辑；仅在用户同时要求正式报告时才进入下方模板与双载体流程。
+仓库文档独立模式不创建 `report-workspace/`、不要求 Word 模板，也不补造 PDF。先完成 `references/repository-markdown.md` 中的仓库/分支/LFS 预检，再建立事实台账并按页面职责编辑。用户要求“整理 README”“补全项目介绍”“详细说明”或给出旧说明、截图、报告时，必须同时执行 `references/project-readme-coverage.md` 的覆盖台账；不得以“突出主线”为由丢弃已核对的模块、运行入口、参数、数据关系或用户明确提供的要点。仅在用户同时要求正式报告时才进入下方模板与双载体流程。
 
 ### 1. 模板盘点与格式契约（模板绑定或双载体交付时）
 
