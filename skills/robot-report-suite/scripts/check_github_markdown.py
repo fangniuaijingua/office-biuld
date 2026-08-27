@@ -1,14 +1,16 @@
 """Check repository Markdown for GitHub-readable documentation defects.
 
-The checker deliberately avoids network access and only validates local paths,
-basic heading structure, simple GitHub-style anchors, media alt text, local
-machine paths, oversized tables and navigation in long documents. Run it from
-the repository being documented, not from this skill repository.
+The default scan avoids network access and validates local paths, basic heading
+structure, simple GitHub-style anchors, media alt text, local machine paths,
+oversized tables and navigation in long documents. Optional Git checks add
+branch and diff-whitespace verification; remote-default verification is opt-in.
+Run it from the repository being documented, not from this skill repository.
 """
 from __future__ import annotations
 
 import argparse
 import re
+import subprocess
 import sys
 import tempfile
 from collections import Counter
@@ -193,6 +195,72 @@ def scan(root: Path, args: argparse.Namespace) -> list[Finding]:
     return findings
 
 
+def run_git(root: Path, *command: str) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        ["git", "-C", str(root), *command],
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        timeout=20,
+        check=False,
+    )
+
+
+def summarize_git_error(result: subprocess.CompletedProcess[str]) -> str:
+    text = (result.stderr or result.stdout).strip().replace("\n", " ")
+    return text[:180] or f"git exited with status {result.returncode}"
+
+
+def inspect_git_state(root: Path, args: argparse.Namespace) -> list[Finding]:
+    """Validate local repository state and, when requested, remote HEAD."""
+    findings: list[Finding] = []
+    relative = Path(".")
+    try:
+        inside = run_git(root, "rev-parse", "--is-inside-work-tree")
+    except (FileNotFoundError, subprocess.TimeoutExpired):
+        return [Finding("ERROR", relative, 1, "无法执行 git，不能进行仓库状态检查。")]
+    if inside.returncode != 0 or inside.stdout.strip() != "true":
+        return [Finding("ERROR", relative, 1, "目标目录不是 Git 工作树。")]
+
+    for command in (("diff", "--check"), ("diff", "--cached", "--check")):
+        result = run_git(root, *command)
+        if result.returncode != 0:
+            findings.append(Finding("ERROR", relative, 1, f"git {' '.join(command)} 失败：{summarize_git_error(result)}"))
+
+    branch = run_git(root, "symbolic-ref", "--quiet", "--short", "HEAD")
+    if branch.returncode != 0:
+        findings.append(Finding("WARN", relative, 1, "当前为 detached HEAD；提交前请确认目标分支。"))
+
+    origin = run_git(root, "remote", "get-url", "origin")
+    if origin.returncode != 0:
+        findings.append(Finding("WARN", relative, 1, "未配置 origin；无法核对默认分支或发布目标。"))
+
+    if args.require_clean_tree:
+        status = run_git(root, "status", "--porcelain")
+        if status.returncode != 0:
+            findings.append(Finding("ERROR", relative, 1, f"无法读取工作区状态：{summarize_git_error(status)}"))
+        elif status.stdout.strip():
+            findings.append(Finding("ERROR", relative, 1, "工作区仍有未提交改动。"))
+
+    if args.verify_remote_default:
+        remote_head = run_git(root, "ls-remote", "--symref", "origin", "HEAD")
+        if remote_head.returncode != 0:
+            findings.append(Finding("ERROR", relative, 1, f"无法读取远程默认分支：{summarize_git_error(remote_head)}"))
+            return findings
+        match = re.search(r"^ref: refs/heads/(.+)\tHEAD$", remote_head.stdout, flags=re.MULTILINE)
+        if not match:
+            findings.append(Finding("ERROR", relative, 1, "远程未返回可解析的默认分支。"))
+            return findings
+        expected = f"origin/{match.group(1)}"
+        local_head = run_git(root, "symbolic-ref", "--quiet", "--short", "refs/remotes/origin/HEAD")
+        if local_head.returncode != 0:
+            findings.append(Finding("WARN", relative, 1, f"本地未设置 origin/HEAD；远程默认分支为 {expected}。"))
+        elif local_head.stdout.strip() != expected:
+            findings.append(Finding("ERROR", relative, 1, f"本地 {local_head.stdout.strip()} 与远程默认分支 {expected} 不一致；请 fetch 后执行 git remote set-head origin -a。"))
+    return findings
+
+
 def run_self_test() -> int:
     with tempfile.TemporaryDirectory() as raw_directory:
         root = Path(raw_directory)
@@ -213,6 +281,9 @@ def run_self_test() -> int:
             require_code_language=True,
             max_table_columns=8,
             toc_threshold_lines=180,
+            verify_git_state=False,
+            verify_remote_default=False,
+            require_clean_tree=False,
         )
         if scan(root, args):
             print("Self-test failed: a valid fixture produced findings.", file=sys.stderr)
@@ -232,6 +303,9 @@ def main() -> int:
     parser.add_argument("--require-code-language", action="store_true", help="Warn on untyped fenced code blocks.")
     parser.add_argument("--max-table-columns", type=int, default=8, help="Warn when a table row has more columns.")
     parser.add_argument("--toc-threshold-lines", type=int, default=180, help="Warn when a longer page has no opening navigation.")
+    parser.add_argument("--verify-git-state", action="store_true", help="Check Git worktree, branch and diff whitespace errors.")
+    parser.add_argument("--verify-remote-default", action="store_true", help="Query origin and verify that origin/HEAD matches its default branch.")
+    parser.add_argument("--require-clean-tree", action="store_true", help="Fail when the Git worktree has uncommitted changes.")
     parser.add_argument("--self-test", action="store_true", help="Run built-in fixtures instead of scanning a repository.")
     args = parser.parse_args()
     if args.self_test:
@@ -240,6 +314,8 @@ def main() -> int:
     if not root.is_dir():
         parser.error(f"Repository root not found: {root}")
     findings = scan(root, args)
+    if args.verify_git_state or args.verify_remote_default or args.require_clean_tree:
+        findings.extend(inspect_git_state(root, args))
     for finding in findings:
         print(f"{finding.level} {finding.path}:{finding.line}: {finding.message}")
     errors = sum(finding.level == "ERROR" for finding in findings)

@@ -50,7 +50,7 @@ description: 用于机器人、嵌入式与自动化项目的模板优先 Word �
 
 “小步交付”不再阻止用户明确要求的完整报告；完整报告仍必须经过全稿渲染检查。
 
-仓库文档独立模式不创建 `report-workspace/`、不要求 Word 模板，也不补造 PDF。直接阅读并执行 `references/repository-markdown.md`；仅在用户同时要求正式报告时才进入下方模板与双载体流程。
+仓库文档独立模式不创建 `report-workspace/`、不要求 Word 模板，也不补造 PDF。先完成 `references/repository-markdown.md` 中的仓库/分支/LFS 预检，再建立事实台账并按页面职责编辑；仅在用户同时要求正式报告时才进入下方模板与双载体流程。
 
 ### 1. 模板盘点与格式契约（模板绑定或双载体交付时）
 
@@ -152,10 +152,10 @@ report-workspace/
 7. 双载体与仓库文档独立任务额外运行：
 
    ```powershell
-   python "<skill-dir>\scripts\check_github_markdown.py" "<repo-root>" --strict --require-code-language
+   python "<skill-dir>\scripts\check_github_markdown.py" "<repo-root>" --strict --require-code-language --verify-git-state
    ```
 
-   修复标题层级、相对链接、图片 `alt` 文本、锚点、长文档目录、表格宽度和代码块语言标记；根据事实台账人工复核证据标签。再用 GitHub 渲染效果复查，而不把本地编辑器的预览当作唯一依据。
+   修复标题层级、相对链接、图片 `alt` 文本、锚点、长文档目录、表格宽度和代码块语言标记，以及 Git diff 空白错误；根据事实台账人工复核证据标签。远程发布后额外使用 `--verify-remote-default --require-clean-tree` 复查默认分支与工作区。再用 GitHub 渲染效果复查，而不把本地编辑器的预览当作唯一依据。
 
 ### 6. 效果展示预览（仅在用户要求时）
 

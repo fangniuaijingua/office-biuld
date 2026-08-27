@@ -2,6 +2,34 @@
 
 适用于没有正式 Word/PDF 交付的项目仓库：README、模块说明、通信协议、证据索引、开发历史、复盘和资料导航。它不是把仓库写成实验报告，也不为了“完整”补造未发生的测试或文档。
 
+## 0. 先做仓库与分支预检
+
+不要只根据当前检出的 `main`、截图或用户记忆判断项目内容。编辑前在目标仓库执行：
+
+```powershell
+git status --short --branch
+git fetch origin --prune
+git remote set-head origin -a
+git branch -a -vv
+git log --all --oneline --decorate -12
+git ls-tree -r --name-only HEAD
+git lfs ls-files
+```
+
+将以下信息写入工作笔记或事实台账：目标远程、GitHub 默认分支、实际包含源码/资料的分支、当前编辑分支、未提交改动、LFS/Release 资产以及准备修改的页面。`main`、`master` 或其他分支历史无关时，不能直接合并、强推、删除或改写默认分支；只有用户明确指定后才做这些远程分支操作。
+
+若源码或资料只在 LFS 归档中，先记录对象名和大小。仅在确实需要核对内容且用户允许下载大文件时运行 `git lfs pull`；不能把未下载的归档推断成不存在的代码，也不能把归档内未核对的脚本写成已验证事实。
+
+提交与推送是两项独立操作：用户只要求“提交”时，创建本地提交但不推送；只有明确要求“推送 / 发布 / 同步远程”时才写入远程。推送完成后执行：
+
+```powershell
+git fetch origin --prune
+git remote set-head origin -a
+python "<skill-dir>\scripts\check_github_markdown.py" "<repo-root>" `
+  --strict --require-code-language --verify-git-state `
+  --verify-remote-default --require-clean-tree
+```
+
 ## 1. 先判定页面职责
 
 先查看仓库现有结构、相邻模块和链接约定，再为本次页面选择一种主要职责：
@@ -26,6 +54,8 @@
 | 示例：协议帧长度 | 固件版本 X | 定义与发送：A；接收验证：B | 源码路径、串口日志 | 源码/日志已核对 | 可公开 |
 
 可用状态为：`实测证据`、`源码/日志已核对`、`用户确认`、`阶段记录`、`待验证`。不要把“设计意图”写成“实测证据”；一次照片只能说明可见装配或场景，不能单独证明性能。
+
+用户的回忆、旧 README、截图与当前代码或训练日志冲突时，保留各自来源和阶段，不自行折中成一个数值。例如“约 400 轮训练”与旧说明中的“450 轮以上”不能合并成“训练约 400–450 轮并已提升精度”；没有原始结果文件时，只写为带来源的阶段记录，并明确最终指标待验证。
 
 多人项目应按**阶段和交付边界**归属：例如“先完成模型部署与训练”“随后完成推理优化与帧率复测”是两个事实，不能压缩成笼统的“视觉由某人完成”。没有证据时使用中性表述并标为待确认。
 
@@ -53,9 +83,9 @@
 编辑完成后运行：
 
 ```powershell
-python "<skill-dir>\scripts\check_github_markdown.py" "<repo-root>" --strict --require-code-language
+python "<skill-dir>\scripts\check_github_markdown.py" "<repo-root>" --strict --require-code-language --verify-git-state
 ```
 
-它检查本地相对链接、图片 `alt`、一级标题、标题层级、可解析的页面锚点、绝对本机路径、长文档导航、过宽表格和代码块语言标记。通过后仍要按事实台账复核证据状态，并在 GitHub 页面复查图片、折叠区、视频/PDF 链接与窄屏表格。
+它检查本地相对链接、图片 `alt`、一级标题、标题层级、可解析的页面锚点、绝对本机路径、长文档导航、过宽表格、代码块语言标记以及 Git diff 的空白错误。通过后仍要按事实台账复核证据状态，并在 GitHub 页面复查图片、折叠区、视频/PDF 链接与窄屏表格。远程发布后追加 `--verify-remote-default --require-clean-tree`，核对远程默认分支与本地跟踪状态。
 
 独立 Markdown 交付只报告：修改文件、各页职责、事实/归属台账摘要、检查结果、公开材料边界和待补证据。若后来新增正式 Word/PDF，再转入 [双载体伴随文档](github-markdown-companion.md) 建立内容映射；不要反向宣称已有 Markdown 等于正式报告。
