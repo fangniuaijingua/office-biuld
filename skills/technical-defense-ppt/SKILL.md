@@ -86,3 +86,8 @@ ppt-workspace/
 - `references/review-rubric.md`：100 分审稿量表、硬失败和返工顺序。
 - `references/validation-plan.md`：G0—G4 质量门与前向测试。
 - `references/report-handoff.md`：仅在导入报告时使用的单向交接规则。
+
+
+## 小幅风格偏好：丰富但可复现
+
+沿用现有生产阶段，不新增平行工作流。页面锁定前按 `references/visual-mix-and-finish.md` 比较构图、裁切与材质变化，主动检索缺少的协调图片；锁定后保持设计可复现。变化的是视觉表达，不是事实、语义色和已确认页面。将选材与 Finish 纳入备料和页面锁定，渲染后再微调，而非交付粗稿后才补装饰。
