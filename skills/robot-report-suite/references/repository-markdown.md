@@ -94,6 +94,8 @@ python "<skill-dir>\scripts\check_github_markdown.py" "<repo-root>" `
 
 ## 5. 发布门
 
+整理说明文件时，执行 [文件用途与中文提交规则](github-markdown-companion.md#7-说明文件用途与中文提交信息)：文件职责留在目录索引中，获得提交授权后按主题使用中文标题记录实际变化。该规则同样适用于独立 Markdown 模式，不要求生成 Word/PDF。
+
 编辑完成后运行：
 
 ```powershell
